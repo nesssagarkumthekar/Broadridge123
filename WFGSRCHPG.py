@@ -10,7 +10,7 @@ grp_found = 'N'
 
 def search_page(url,search_name,Pcode):
 
-    print(Pcode)
+    #print(Pcode)
     group_exists = 'N'
     resp = requests.get(url)
 
@@ -33,7 +33,14 @@ def search_page(url,search_name,Pcode):
             #print(mem_name)
 
             if y.count(mem_name) > 0:
-                grp_name =x
+                #print(y.count(mem_name))
+                #print(y)
+                #print(mem_name)
+                if y.count(mem_name)==1 :
+                    grp_name = x
+                else:
+                    grp_name = x + ',' + grp_name
+
                 group_exists ='Y'
 
     if soup.find('div', attrs={'id': 'ourTeams'}) != None and group_exists != 'Y':
@@ -45,15 +52,25 @@ def search_page(url,search_name,Pcode):
             #print('Before call : ' + grp_found )
             Wg.All_members = []
             grp_found = Wf.Search_for_Group(grp_url, search_name)
+            gname = groups.find('a', href=True).text.strip()
 
-            Wg.Group_and_Member_Dict[groups.find('a', href=True).text.strip()] = Wg.All_members
+
+            if 'of Wells Fargo Advisors' in gname:
+                grp_name = gname.split('of Wells Fargo Advisors')[0]
+            else:
+                grp_name = gname
+
+            #print(grp_name)
+            #Wg.Group_A.append(grp_name)
+
+            Wg.Group_and_Member_Dict[grp_name] = Wg.All_members
 
             #print('Dcitionary is :----------------------->')
             #print(Wg.Group_and_Member_Dict)
             #print('After call : ' + grp_found)
-            if grp_found == 'Y':
-                print('group found ' + grp_name + ' for ' + search_name[0] + '  ' + search_name[1] )
-                grp_name = groups.find('a', href=True).text.strip()
+            #if grp_found == 'Y':
+                #print('group found ' + grp_name + ' for ' + search_name[0] + '  ' + search_name[1] )
+                #grp_name = groups.find('a', href=True).text.strip()
                 #Wg.Group_A.append(grp_name)
 
 

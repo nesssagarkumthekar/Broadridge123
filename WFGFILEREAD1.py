@@ -1,12 +1,20 @@
 ########### Import all the packages needed for the processing ##############
 import time
 import pandas as pd
+import traceback2
+
 import main as main
 from concurrent.futures import ThreadPoolExecutor , as_completed
 import time
 import WFGGLOBAL as Wg
 import traceback
+import traceback2
+import sys
+"""
+The purpose of this program is to read list of financial advisors and call the submodules to extract the advisor information
 
+
+"""
 Start_time = time.strftime('%X %x %Z')
 print('start time is : ' + Start_time)
 
@@ -35,7 +43,8 @@ try:
         Fname = row['mfo_per_first_name']
         Lname = row['mfo_per_last_name']
         #Pcode = str(row['mfo_ofl_postal_code']).split('-')[0]
-        Pcode = str(row['mfo_ofl_postal_code'])
+        #Pcode = str(row['mfo_ofl_postal_code'])
+        Pcode = row['mfo_ofl_postal_code']
         Fullname=[Fname,Lname]
         #print(Fullname)
         #print(Pcode)
@@ -71,21 +80,21 @@ finally:
     End_time = time.strftime('%X %x %Z')
     print('End time of url process is : ' + End_time)
 
-    #counter1 = 0
+    counter1 = 0
 with ThreadPoolExecutor(max_workers=10) as executor:
     start = time.time()
     futures = {executor.submit(main.process_file,member): member for member in members}
     for future in as_completed(futures):
-        #counter1 = counter1 + 1
-        #print(str(counter1))
+        counter1 = counter1 + 1
+        print(str(counter1))
         url = futures[future]
         try:
             data = future.result()
         except Exception as exc:
-            print('%r generated an exception: %s' % (member, exc))
-            print(traceback.TracebackException)
-            #print(traceback.format_exception())
-            #pass
+            print('%r generated an exception: %s' % (url, exc))
+            exc_type, exc_value, exc_tb = sys.exc_info()
+            tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
+            print(''.join(tb.format_exception_only()))
         #else:
             #print('%r page is  bytes' % (member))
         #futures = []
@@ -106,11 +115,11 @@ try:
     df = pd.DataFrame({'Name': Wg.Name_A, 'Designation': Wg.Des_A, 'Phone': Wg.Phone_A, 'Email': Wg.Email_A,
                              'Primary Person': Wg.Primary_A, 'Group': Wg.Group_A, 'Url': Wg.Url_A,
                              'Linked In Url': Wg.Link_A})
-    df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Found_007.csv', index=False, encoding='utf-8')
+    df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Found_009.csv', index=False, encoding='utf-8')
 
     df = pd.DataFrame({'First Name': Wg.Fname_not_found, 'Last Name': Wg.Lname_not_found, 'Zip': Wg.Zip_not_found})
 
-    df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Error_007.csv', index=False, encoding='utf-8')
+    df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Error_009.csv', index=False, encoding='utf-8')
 
 
 except ValueError:
@@ -129,7 +138,7 @@ except ValueError:
     print('Url :')
     print(Wg.Url_A.__len__())
     df = pd.DataFrame({'Url': Wg.Url_A, 'Name': Wg.Name_A})
-    df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFGERR0017.csv', index=False, encoding='utf-8')
+    df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFGERR0018.csv', index=False, encoding='utf-8')
 
     """
     df = Wg.pd.DataFrame({'List of invalid Urls': Wg.Error_Msg})

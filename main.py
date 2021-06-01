@@ -26,7 +26,8 @@ def process_file(Fullname,Pcode):
 
 """
 
-member = [['Tyler', 'Naki'], '89410-5207']
+#member = [['Tyler', 'Naki'], '89410-5207']
+#member = [['Karlynn', 'Quist'], '82801-3904']
 
 def process_file(member):
 
@@ -48,12 +49,12 @@ def process_file(member):
     br.form['chkFNet'] = False
     br.form['chkBIS'] = False
 
-    br.form['zip5'] = Pcode.split('-')[0]
+    br.form['zip5'] = str(Pcode).split('-')[0]
     #br.form['zip5'] = '75201'
     # br.form['zip5'] = '28202'
 
 
-    search_zip = Pcode.split('-')[0]
+    search_zip = str(Pcode).split('-')[0]
     # search_zip = '28202'
     search_name = Fullname
     # search_name = ['Tonya','McMahon']
@@ -61,30 +62,41 @@ def process_file(member):
 
     br.submit()
     soup = BeautifulSoup(br.response().read(), "lxml")
-    table = soup.find_all('table', attrs={'class': 'generictext'})
 
     found_flag = 'N'
-    for td in table[0].find_all('td'):
-        # print(td)
-        # print(td.find('div').find('strong'))
-        try:
-            url = td.find('div').find('strong').find('a', href=True).get('href')
-            print(url)
-            for links in td.find_all('br'):
-                zip = re.sub("(\n)|(\r)|(\t)|(\xa0)|(\n),", "", links.nextSibling)
-                print(zip)
-                if search_zip in zip:
-                    print('came inside this ')
-                    found_flag = Ws.search_page(url, search_name, Pcode)
 
 
-        except AttributeError:
-            pass
+    #print(soup.find('div',attrs={'id':'alertBox'}))
 
-        finally:
+    if soup.find('div',attrs={'id':'alertBox'}) != None:
+        #print('came inside')
+        pass
+    else:
+        table = soup.find_all('table', attrs={'class': 'generictext'})
+        for td in table[0].find_all('td'):
+            # print(td)
+            # print(td.find('div').find('strong'))
+            try:
+                url = td.find('div').find('strong').find('a', href=True).get('href')
+                # print(url)
+                for links in td.find_all('br'):
+                    zip = re.sub("(\n)|(\r)|(\t)|(\xa0)|(\n),", "", links.nextSibling)
+                    # print(zip)
+                    if search_zip in zip:
+                        # print('came inside this ')
+                        found_flag = Ws.search_page(url, search_name, Pcode)
 
-            if found_flag == 'Y':
-                break
+
+            except AttributeError:
+                pass
+            except IndexError:
+                pass
+
+            finally:
+
+                if found_flag == 'Y':
+                    break
+
 
     if found_flag != 'Y':
         #print('member not found ' + search_name[0] + '  ' + search_name[1])
@@ -92,6 +104,8 @@ def process_file(member):
         Wg.Fname_not_found.append(search_name[0])
         Wg.Lname_not_found.append(search_name[1])
         Wg.Zip_not_found.append(Pcode)
+
+
 
 # print(hrefs)
 
@@ -124,4 +138,4 @@ print('End time is : ' + tb)
 br.close()
 
 """
-process_file(member)
+#process_file(member)
