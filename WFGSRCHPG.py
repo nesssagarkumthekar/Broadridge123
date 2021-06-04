@@ -4,17 +4,18 @@ import requests
 from bs4 import BeautifulSoup
 import WFGGLOBAL as Wg
 import WFGSRCFRGP as Wf
-import WFGSRCMB2 as W2
 
 grp_found = 'N'
+
 
 def search_page(url,search_name,Pcode):
 
     #print(Pcode)
     group_exists = 'N'
+    grp_found ='N'
     resp = requests.get(url)
 
-    #print('this is my url : '+ url +  '  '+ search_name[0] + '  ' + search_name[1])
+
     if resp.ok:
         pass
     else:
@@ -25,17 +26,14 @@ def search_page(url,search_name,Pcode):
     grp_name = ' '
 
     if Wg.Group_and_Member_Dict.__len__() > 0:
-        #print('checking group')
+
         for x,y in Wg.Group_and_Member_Dict.items():
-            #print('Search the member here')
-            #print(x,y)
+
             mem_name = search_name[0].upper() +' ' + search_name[1].upper()
-            #print(mem_name)
+
 
             if y.count(mem_name) > 0:
-                #print(y.count(mem_name))
-                #print(y)
-                #print(mem_name)
+
                 if y.count(mem_name)==1 :
                     grp_name = x
                 else:
@@ -49,10 +47,10 @@ def search_page(url,search_name,Pcode):
             grp_url = groups.find('a', href=True).get('href')
             Wg.All_groups.append(groups.find('a', href=True).text.strip())
 
-            #print('Before call : ' + grp_found )
             Wg.All_members = []
             grp_found = Wf.Search_for_Group(grp_url, search_name)
             gname = groups.find('a', href=True).text.strip()
+            #print('group found  ' + grp_found)
 
 
             if 'of Wells Fargo Advisors' in gname:
@@ -60,18 +58,12 @@ def search_page(url,search_name,Pcode):
             else:
                 grp_name = gname
 
-            #print(grp_name)
-            #Wg.Group_A.append(grp_name)
+            if grp_found == 'Y':
+                gname1 = grp_name
 
             Wg.Group_and_Member_Dict[grp_name] = Wg.All_members
-
-            #print('Dcitionary is :----------------------->')
-            #print(Wg.Group_and_Member_Dict)
-            #print('After call : ' + grp_found)
-            #if grp_found == 'Y':
-                #print('group found ' + grp_name + ' for ' + search_name[0] + '  ' + search_name[1] )
-                #grp_name = groups.find('a', href=True).text.strip()
-                #Wg.Group_A.append(grp_name)
+            #print(grp_name)
+            #print(Wg.All_members)
 
 
 
@@ -82,8 +74,6 @@ def search_page(url,search_name,Pcode):
         names.capitalize()
         counter = counter + 1
 
-
-        #print(search_name)
         if (search_name[0].upper() in names and search_name[1].upper() in names) or \
                 (search_name[1].upper() in names and search_name[0][0:3].upper() in names) :
 
@@ -92,36 +82,21 @@ def search_page(url,search_name,Pcode):
             else:
                 Wg.Primary_A.append('N')
 
-            #print("found desired member " + names + ' Url is : ' + Memurl )
             mem_found ='Y'
             Wb.search_member(Memurl)
             Wg.Url_A.append(Memurl)
-            #if grp_found =='Y' or group_exists =='Y':
-            Wg.Group_A.append(grp_name)
-
-            return 'Y'
-
-
-        """
-        if search_name[1].upper() in names and search_name[0][0:4].upper() in names :
-            print('inside search 2---------------------------------> ' + search_name[0][0:4] +'  ' + search_name[1] )
-
-            
-            
-            
-
-            if W2.search_member(Memurl,Pcode)== 'Y':
-                if counter == 1:
-                    Wg.Primary_A.append('Y')
-                else:
-                    Wg.Primary_A.append('N')
-
-                Wg.Url_A.append(Memurl)
+            if grp_found =='Y':
+                Wg.Group_A.append(gname1)
+            elif group_exists =='Y':
                 Wg.Group_A.append(grp_name)
+            else:
+                Wg.Group_A.append('')
+
 
             return 'Y'
 
-        """
+
+
 
 
 

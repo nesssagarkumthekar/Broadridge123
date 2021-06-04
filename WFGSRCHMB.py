@@ -22,8 +22,7 @@ def search_member(Memurl):
         name = name.split(',')[0]
 
     Wg.Name_A.append(name)
-    #designation = soup.find('div', attrs := {'id': 'nameTitle'}).find('h2').text.strip()
-    #print(soup.find('div', attrs := {'id': 'nameTitle'}).find_all('h2').text.strip())
+
 
     try:
         designation = soup.find('div',attrs:={'id':'nameTitle'}).find_all('h2')[1].text.strip()
@@ -35,13 +34,12 @@ def search_member(Memurl):
 
     Wg.Des_A.append(designation)
     Wg.Link_A.append('')
-    #Wg.Group_A.append('')
+
     Address_tag = soup.find('div',attrs:={'id': 'address'})
 
     ph2=''
     for lines in Address_tag.select('strong'):
-    #print(lines.text)
-    #print(lines.nextSibling)
+
         if 'Phone' in lines.text:
             ph=lines.nextSibling.strip()
             ph1 = re.sub("(\n)|(\r)|(\t)|(\xa0)|(\n),", "", ph)
