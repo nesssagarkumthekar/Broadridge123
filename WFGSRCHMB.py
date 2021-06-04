@@ -3,6 +3,14 @@ from bs4 import BeautifulSoup
 import re
 import WFGGLOBAL as Wg
 
+"""
+The purpose of this Function is to
+    1.If the Advisor is found in the Search result Link then his/her URL from the Search Result Link is passed
+     as an input to this Function
+    2.This function extracts the Advisor information and keeps into a Global Arrays
+
+"""
+
 def search_member(Memurl):
     resp = requests.get(Memurl)
 

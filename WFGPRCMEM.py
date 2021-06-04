@@ -6,11 +6,14 @@ import WFGGLOBAL as Wg
 
 
 """
-############ Change Log ###########
-This pgm is used to open and query wells fargo website for testing purpose
-
-
-
+The purpose of this Function is to
+    1.This Function takes a member from the extracted Data
+    2.The Postal code for this member is provided as an input to WellsFargo Web Site to search Advisor details
+    3.The search returns links for the Advisors present in an around 25 Mile radius
+    4.The links are passed to Search_page Function to check if the Advisor Exists into the link
+    5.If the Advisor is present in the link, details are added into the Global Array of the found members
+    6.If the Advisor is not present then Advisor Name and Postal Code is added into Not Found Array
+     
 
 """
 
@@ -94,7 +97,6 @@ process_file(member)
 print('--------------------')
 print(Wg.Group_A)
 print(Wg.Name_A)
-print(Wg.Link_A)
+print(Wg.Link_A)"""
 print(Wg.Url_A)
 
-"""

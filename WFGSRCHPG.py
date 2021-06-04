@@ -5,6 +5,16 @@ from bs4 import BeautifulSoup
 import WFGGLOBAL as Wg
 import WFGSRCFRGP as Wf
 
+"""
+The purpose of this Function is to
+    1.This Function takes a URL as an input from the Search results from the WellsFargo website search results
+    2.The URL Data is scrapped to check if the member is present in the URL
+    3.The Groups present in the URL and its members are captured and stored into an Array using search group function.
+     This Array is used again if the Advisor from the same group is passed as an input.
+     This saves additional Hits to the same URL
+    3.If the mach on the Member name is found then the Search Member function is called to extract the Advisor details
+"""
+
 grp_found = 'N'
 
 

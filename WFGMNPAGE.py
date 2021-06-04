@@ -6,6 +6,12 @@ import WFGGLOBAL as Wg
 import WFGFILEREAD1 as Wr1
 import time
 
+"""
+The purpose of this module is to
+    1.Create a GUI (Graphical User Interface) for Selection of Input and Output File
+    2.To provide Error information if any Error is encountered
+    3.Provide the status of the progress
+"""
 
 root = Tk()
 root.geometry('1000x600')
@@ -24,13 +30,14 @@ Text = StringVar()
 private_key = StringVar()
 mode = StringVar()
 Result = StringVar()
+exc_var = StringVar()
 
 display = Entry(root)
 File_success = StringVar()
 Notify = StringVar()
-pb1= tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=100, mode='indeterminate')
-pb1.pack(expand=True)
-pb1.place(x=290, y=500)
+#pb1= tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=100, mode='indeterminate')
+#pb1.pack(expand=True)
+#pb1.place(x=290, y=500)
 
 
 
@@ -48,6 +55,7 @@ def Reset():
     mode.set("")
     Result.set("")
     File_success.set("")
+    exc_var.set("")
 
 def Browse():
 
@@ -68,11 +76,21 @@ def Start():
 
     input_file = Wg.File_Input.name
     print('this is File : ' + input_file)
-    Wr1.Start_Process(input_file)
-    Label(root, font='arial 12 bold', text='Completed the extraction process, Files :').place(x=60, y=320)
-    Label(root, font='arial 12 bold', text=Wg.File_output1 + ',').place(x=70, y=340)
-    Label(root, font='arial 12 bold', text=Wg.File_output2 + ',').place(x=70, y=360)
-    Label(root, font='arial 12 bold', text='are created successfully').place(x=290, y=380)
+    try:
+        Wr1.Start_Process(input_file)
+        Label(root, font='Calibri 12 ', text='Completed the extraction process, Files :').place(x=60, y=320)
+        Label(root, font='Calibri 12 bold', text=Wg.File_output1 + ',').place(x=70, y=340)
+        Label(root, font='Calibri 12 bold', text=Wg.File_output2 + ',').place(x=70, y=360)
+        Label(root, font='Calibri 12 ', text='are created successfully').place(x=290, y=380)
+    except PermissionError:
+        Wg.message='Permission to write into a file is denied. ' \
+                   'Please check if the file is already open or ' \
+                   'a folder is accessible to the application'
+        print(Wg.message)
+        exc_var.set(Wg.message)
+        lable2 = tkinter.ttk.Label(root, font='Calibri 12 bold', textvariable=exc_var, background="red").place(
+            x=60,
+            y=500)
 
 def step():
     #print(range1)
@@ -90,7 +108,7 @@ Entry(root, font = 'arial 10', textvariable = Text,width =50).place(x=390, y = 6
 
 btn1= Button(root,text ='Browse' ,command = Browse).place(x=790, y = 60)
 btn_help= Button(root,text ='HELP' ,command = Browse).place(x=880, y = 60)
-lable1 = tkinter.ttk.Label(root, font = 'arial 12 bold', textvariable =Notify,background="light green" ).place(x=60, y = 100)
+lable1 = tkinter.ttk.Label(root, font = 'Calibri 12', textvariable =Notify,background="light green" ).place(x=60, y = 100)
 
 tkinter.ttk.Label(select=lable1).pack(fill= tkinter.X, pady=10)
 
@@ -99,4 +117,6 @@ btn2 = Button(root,text ='RESET' ,command = Reset).place(x=80, y = 230)
 btn3 = Button(root,text ='EXIT' ,style = 'W.TButton',command = Exit).place(x=180, y = 230)
 btn4 = Button(root,text ='Start' ,command = Start).place(x=280, y = 230)
 
+
 root.mainloop()
+

@@ -2,6 +2,13 @@ import WFGGLOBAL as Wg
 import pandas as pd
 import time
 
+
+"""
+The purpose of this function is to
+    1.Create a Panda Data Frame for all the extracted details
+    2.Write the Advisors into an Output file for whom the details are found
+    3.Write the Advisors into an Error Output file for whom the details are not found
+"""
 def Write_To_Csv():
 
     try:
@@ -32,6 +39,7 @@ def Write_To_Csv():
         print(Wg.Url_A.__len__())
         df = pd.DataFrame({'Url': Wg.Url_A, 'Name': Wg.Name_A})
         df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFGERR0011.csv', index=False, encoding='utf-8')
+
 
     finally:
         print('Process Completed Successfully')

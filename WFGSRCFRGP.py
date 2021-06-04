@@ -2,6 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 import WFGGLOBAL as Wg
 
+"""
+The purpose of this Function is to
+    1.This Function takes a URL as an input from the Search results  group links
+    2.The Group URL Data is scrapped and stored into an Array using search group function.
+     This Array is used again if the Advisor from the same group is passed as an input.
+     This saves additional Hits to the same URL
+    3.This function also returns a flag if the Advisor is present in the group
+"""
 
 def Search_for_Group(Grpurl,search_name):
 
