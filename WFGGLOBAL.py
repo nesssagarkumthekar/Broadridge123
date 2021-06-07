@@ -35,6 +35,8 @@ CSV Files
 File_Input = ''
 File_output1 = ''
 File_output2 =''
+Folder_loc =''
+
 
 """
 Counters and Message Variables

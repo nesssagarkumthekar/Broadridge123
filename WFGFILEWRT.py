@@ -1,6 +1,7 @@
 import WFGGLOBAL as Wg
 import pandas as pd
 import time
+import datetime
 
 
 """
@@ -15,12 +16,18 @@ def Write_To_Csv():
         df = pd.DataFrame({'Name': Wg.Name_A, 'Designation': Wg.Des_A, 'Phone': Wg.Phone_A, 'Email': Wg.Email_A,
                            'Primary Person': Wg.Primary_A, 'Group': Wg.Group_A, 'Url': Wg.Url_A,
                            'Linked In Url': Wg.Link_A})
-        df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Found_012.csv', index=False, encoding='utf-8')
-        Wg.File_output1 = 'WFARG_Found_013.csv'
+
+        print('Folder Location is :  '+ Wg.Folder_loc)
+        #df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Found_012.csv', index=False, encoding='utf-8')
+
+        Wg.File_output1 = 'WFARG_Found_' + str(datetime.datetime.now()).replace(':','.') + '.csv'
+        df.to_csv(Wg.Folder_loc + '/' + Wg.File_output1, index=False, encoding='utf-8')
         df = pd.DataFrame({'First Name': Wg.Fname_not_found, 'Last Name': Wg.Lname_not_found, 'Zip': Wg.Zip_not_found})
 
-        df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Error_012.csv', index=False, encoding='utf-8')
-        Wg.File_output2 = 'WFARG_Error_013.csv'
+        #df.to_csv('/Users/P7165881/Desktop/Brodridge/WellsFargo/WFARG_Error_012.csv', index=False, encoding='utf-8')
+        Wg.File_output2 = 'WFARG_Error_' + str(datetime.datetime.now()).replace(':','.') + '.csv'
+        df.to_csv(Wg.Folder_loc + '/' + Wg.File_output2, index=False, encoding='utf-8')
+
 
     except ValueError:
         print('Name :')
