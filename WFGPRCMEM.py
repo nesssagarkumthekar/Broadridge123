@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from mechanize import Browser
 import WFGSRCHPG as Ws
 import WFGGLOBAL as Wg
+#import WFGALTSRCH as Wa
 
 
 """
@@ -21,7 +22,7 @@ The purpose of this Function is to
 #member = [['Matthew', 'Noble'], '43017-2950']
 #member = [['Matthew','Lowe'],'75225-6330']
 #member = [['Richard','Barry'],'95403-5738']
-
+#member =[['Pearl','Maalouf'],22201-4611]
 def process_members(member):
 
     Fullname = member[0]
@@ -39,8 +40,8 @@ def process_members(member):
     br.open('https://www.wellsfargo.com/locator/wellsfargoadvisors/search')
 ###
     br.form = list(br.forms())[0]
-    br.form['chkFNet'] = False
-    br.form['chkBIS'] = False
+    #br.form['chkFNet'] = False
+    #br.form['chkBIS'] = False
 
     br.form['zip5'] = str(Pcode).split('-')[0]
     search_zip = str(Pcode).split('-')[0]
@@ -77,26 +78,31 @@ def process_members(member):
                 if found_flag == 'Y':
                     break
 
+
     if found_flag != 'Y':
+        url = 'EMPTY'
+        found_flag = Ws.search_page(url, search_name, Pcode)
+        #print(found_flag)
 
-        Wg.Fname_not_found.append(search_name[0])
-        Wg.Lname_not_found.append(search_name[1])
-        Wg.Zip_not_found.append(Pcode)
-
-
-
+        if found_flag != 'Y':
+            Wg.Fname_not_found.append(search_name[0])
+            Wg.Lname_not_found.append(search_name[1])
+            Wg.Zip_not_found.append(Pcode)
 
 
     br.close()
 
 
 
+
 """
-process_file(member)
+
+process_members(member)
 
 print('--------------------')
 print(Wg.Group_A)
 print(Wg.Name_A)
-print(Wg.Link_A)"""
+print(Wg.Link_A)
 print(Wg.Url_A)
 
+"""

@@ -72,6 +72,9 @@ def Start_Process(input_file):
         """
         Print the count of the number of members present in the array
         """
+    except ValueError:
+        print('One of the column is blank for the row')
+
     finally:
         End_time = time.strftime('%X %x %Z')
         Wg.Counter_max = members.__len__()
@@ -86,6 +89,7 @@ def Start_Process(input_file):
             Wg.Counter_global = Wg.Counter_global + 1
             #print(str(counter1))
             url = futures[future]
+            #print(url)
             try:
                 data = future.result()
             except Exception as exc:

@@ -14,8 +14,12 @@ The purpose of this Function is to
 def search_member(Memurl):
     resp = requests.get(Memurl)
 
+    #print('member found in member search ' + Memurl)
+
     if resp.ok:
-        pass
+        if resp.url != Memurl:
+           return 'N'
+        #pass
     else:
         print('error from search member')
 
@@ -67,7 +71,7 @@ def search_member(Memurl):
 
     Wg.Email_A.append(email)
 
-
+    return 'Y'
 
 
 

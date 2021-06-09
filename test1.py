@@ -1,23 +1,19 @@
-from tkinter import *
-from tkinter.ttk import *
-import time
 
-ws = Tk()
-ws.title('PythonGuides')
-ws.geometry('400x250+1000+300')
-
-
-def step():
-    for i in range(5):
-        ws.update_idletasks()
-        pb1['value'] += 20
-
-        time.sleep(1)
+class class1:
+    def name(self):
+        return 'class1'
+    def head(self):
+        return 'welcome to my head'
+    def verify(self,str1,str2):
+        if str1 in str2:
+            print('yes, string '+ str1 + ' is present in ' + str2)
 
 
-pb1 = Progressbar(ws, orient=HORIZONTAL, length=100, mode='indeterminate')
-pb1.pack(expand=True)
+x = class1()
 
-Button(ws, text='Start', command=step).pack()
+y= x.name()
 
-ws.mainloop()
+print(y)
+
+#x.verify('sagar','sagar kumthekar')
+

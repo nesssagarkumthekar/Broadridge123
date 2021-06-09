@@ -5,6 +5,8 @@ from tkinter.ttk import *
 import WFGGLOBAL as Wg
 import WFGFILEREAD1 as Wr1
 import time
+import os
+import psutil
 
 """
 The purpose of this module is to
@@ -37,23 +39,27 @@ Complete_Msg_Part2 = StringVar()
 Ouptut_File_1=StringVar()
 Output_file_2=StringVar()
 Choose_Folder_msg =StringVar()
-
+location = ''
 display = Entry(root)
 File_success = StringVar()
 Notify = StringVar()
 #pb1= tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=100, mode='indeterminate')
 #pb1.pack(expand=True)
 #pb1.place(x=290, y=500)
-
+current_system_pid = os.getpid()
 
 
 Notify.set("\n"
            "\nDefault location for Storing the results CSV File is C:/Users/P7165881/Desktop/Brodridge/        "
            "\n")
-Choose_Folder_msg.set("Select a Location to Store Output Files :")
+Choose_Folder_msg.set("Optional: Select a Location to Store Output Files :")
 
 Output_Folder_Loc.set("Default as above")
+
 def Exit():
+    #current_system_pid = os.getpid()
+    #psutil.Process(current_system_pid).terminate()
+    #ThisSystem = ThisSystem.terminate()
     root.destroy()
 
 
@@ -84,30 +90,51 @@ def Browse():
     Label(root, font='arial 12', textvariable=File_success).place(x=60, y=280)
 
 
-def Start():
+def Select_A_Folder():
+    location = filedialog.askdirectory(initialdir="C:/Users/P7165881/Desktop/Brodridge/")
+    print('this is the location ------> ' + location)
+    Output_Folder_Loc.set(location)
 
-    input_file = Wg.File_Input.name
-    print('this is File : ' + input_file)
+def Start():
+    Base_loc = 'C:/Users/P7165881/Desktop/Brodridge'
+    start_time = time.strftime('%X %x %Z')
+    print('Start Time time is : ' + start_time)
+
+    print(location)
+
+    if location!='':
+       Wg.Folder_loc=location
+    else:
+        Output_Folder_Loc.set(location)
+        Wg.Folder_loc = Base_loc
+
     try:
-        Wr1.Start_Process(input_file)
-        Complete_Msg_Part1.set('Completed the extraction process, Files :')
-        Ouptut_File_1.set(Wg.File_output1)
-        Output_file_2.set(Wg.File_output2)
-        Complete_Msg_Part2.set(' are created successfully')
-        Label(root, font='Calibri 12 ', textvariable=Complete_Msg_Part1).place(x=60, y=320)
-        Label(root, font='Calibri 12 bold', textvariable= Ouptut_File_1).place(x=120, y=340)
-        Label(root, font='Calibri 12 bold', textvariable= Output_file_2 ).place(x=120, y=360)
-        Label(root, font='Calibri 12 ', textvariable=Complete_Msg_Part2).place(x=290, y=380)
-    except PermissionError:
-        Wg.message='Permission to write into a file is denied. ' \
-                   'Please check if the file is already open or ' \
-                   'a folder is accessible to the application'
-        print(Wg.message)
+        input_file = Wg.File_Input.name
+        try:
+            Wr1.Start_Process(input_file)
+            Complete_Msg_Part1.set('Completed the extraction process, Files :')
+            Ouptut_File_1.set(Wg.File_output1)
+            Output_file_2.set(Wg.File_output2)
+            Complete_Msg_Part2.set(' are created successfully')
+            Label(root, font='Calibri 12 ', textvariable=Complete_Msg_Part1).place(x=60, y=320)
+            Label(root, font='Calibri 12 bold', textvariable= Ouptut_File_1).place(x=120, y=340)
+            Label(root, font='Calibri 12 bold', textvariable= Output_file_2 ).place(x=120, y=360)
+            Label(root, font='Calibri 12 ', textvariable=Complete_Msg_Part2).place(x=290, y=380)
+        except PermissionError:
+            Wg.message='Permission to write into a file is denied. ' \
+                       'Please check if the file is already open or ' \
+                       'a folder is accessible to the application'
+            print(Wg.message)
+            exc_var.set(Wg.message)
+            lable2 = tkinter.ttk.Label(root, font='Calibri 12 bold', textvariable=exc_var, background="red").place(
+                x=60,
+                y=500)
+    except AttributeError:
+        Wg.message = ' First Select a File!'
         exc_var.set(Wg.message)
         lable2 = tkinter.ttk.Label(root, font='Calibri 12 bold', textvariable=exc_var, background="red").place(
             x=60,
             y=500)
-
 """
 def step():
     #print(range1)
@@ -119,14 +146,8 @@ def step():
         time.sleep(1)
 """
 
-def Select_A_Folder():
-    Base_loc = 'C:/Users/P7165881/Desktop/Brodridge/'
-    location = filedialog.askdirectory(initialdir="C:/Users/P7165881/Desktop/Brodridge/")
-    if Output_Folder_Loc._name != location:
-        Output_Folder_Loc.set(location)
-        Wg.Folder_loc=location
-    else:
-        Wg.Folder_loc = Base_loc
+
+
 
 
 Label(root, font= 'arial 12', text='Location of Input file containing Members').place(x= 60,y=60)
